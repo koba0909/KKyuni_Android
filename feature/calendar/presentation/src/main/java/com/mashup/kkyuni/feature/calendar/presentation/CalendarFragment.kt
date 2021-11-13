@@ -48,16 +48,18 @@ class CalendarFragment : BindingFragment<FragmentCalendarBinding>(R.layout.fragm
         viewModel.run {
             viewLifecycleOwner.lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                    onSetting.collect {
-                        CalendarFragmentDirections.actionToSetting().run {
-                            findNavController().navigate(this)
+                    launch {
+                        onSetting.collect {
+                            CalendarFragmentDirections.actionToSetting().run {
+                                findNavController().navigate(this)
+                            }
                         }
                     }
 
-                    onPlayList.collect {
-                        // 여기로 year, month 넘겨주세요
-                        // navigateToPlayListFragment()
+                    launch {
+                        onPlayList.collect { (year, month) ->
+                            navigateToPlayListFragment(year, month)
+                        }
                     }
                 }
             }
